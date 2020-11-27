@@ -18,9 +18,9 @@ See also:
 ```
 $ docker-compose up --build
 ```
-(When the container is build, you may drop the --build parameter.)    
+(When the container is build, you may drop the --build parameter when starting again after stopping the container.)    
 
-Both the Rest API and the postgreSQL database should be running after the building process. (his may take a while.)    
+Both the Rest API and the postgreSQL database should be running after the building process. (This may take a while.)    
 
 Right now, following ports are used:
 - API: localhost:8080
