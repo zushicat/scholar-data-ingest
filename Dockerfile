@@ -12,6 +12,12 @@ RUN pip install --no-cache-dir poetry && \
 
 COPY . .
 
+RUN cd /app/data && \
+    mkdir /data && \
+    cd /app/src/ldig/models && \
+    tar -xzf model.latin.tar.gz && \
+    mv model.latin /data/model.latin
+
 EXPOSE 80
 
 CMD ["poetry", "run", "python", "-m", "scholar_data_digest.api"]

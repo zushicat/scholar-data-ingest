@@ -1,0 +1,30 @@
+# Git
+.git*
+
+# Python 3
+__pycache__/
+.mypy_cache/
+.pytest_cache/
+.cache/
+.coverage*
+
+# macOS
+.DS_Store
+
+# Atom Remote Sync
+.remote-sync.json
+
+# Visual Studio Code
+.vscode/
+
+# Pipenv & poetry
+Pipfile*
+Makefile
+.venv/
+pyproject.lock
+
+data/.venv
+data/model.latin
+data/foodgraph
+data/csv
+data/tmp

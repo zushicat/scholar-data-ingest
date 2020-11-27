@@ -7,7 +7,7 @@ from werkzeug.wrappers import Request, Response
 from werkzeug.exceptions import HTTPException
 
 from .exceptions import InternalError
-from soil_moisture_api.process import ping
+from scholar_data_digest.process import ping
 
 
 def http_exception(req: Request, e: HTTPException) -> Response:
