@@ -18,7 +18,7 @@ See also:
 ```
 $ docker-compose up --build
 ```
-(When the container is build, you may drop the --build parameter when starting again after stopping the container.)    
+(When the container is build, you may drop the --build parameter in case of re-starting the container.)    
 
 Both the Rest API and the postgreSQL database should be running after the building process. (This may take a while.)    
 
@@ -46,7 +46,7 @@ Getting files with curl (i.e. for OSX user):
 ```
 $ curl -O https://s3-us-west-2.amazonaws.com/ai2-s2-research-public/open-corpus/2020-11-06/manifest.txt
 ```
-- get individual files from manifest.txt listing (stringly recommended)
+- get individual files from manifest.txt listing (strongly recommended)
 ```
 $ curl -O https://s3-us-west-2.amazonaws.com/ai2-s2-research-public/open-corpus/2020-11-06/s2-corpus-000.gz
 ```
