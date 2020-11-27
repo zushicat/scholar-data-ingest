@@ -61,7 +61,7 @@ CREATE TABLE public.paper (
     author_ids text NOT NULL,
     text_ids text NOT NULL,
     research_fields text,
-    labguage text,
+    language text,
     cited_paper_ids text,
     cited_by_paper_ids text
 );
