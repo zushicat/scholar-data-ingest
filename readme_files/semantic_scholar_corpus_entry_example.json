@@ -1,0 +1,63 @@
+{
+    "id": "0cf511f26fa68244ed4055afee09a5af64c0a9ce",
+    "title": "Thermal Radiation from a Tropospheric Dust Suspension",
+    "paperAbstract": "INCREASING concern is being felt by scientists and laymen alike over the possibility of climate alteration due to increased atmospheric dust. Although the early consensus of most scientists was that increasing the dust content of the atmosphere would tend to cool the Earth, owing to an increased backscatter to space of solar radiation, several investigators have recently published studies indicating that this conclusion may not unconditionally hold true1–3. Thus, the question of whether increased atmospheric aerosol would tend to warm or cool the Earth, via its interaction with solar radiation, remains an open one, awaiting additional data on the solar scattering and absorptive properties of natural and man-made aerosols.",
+    "authors": [
+      {
+        "name": "S. B.  IDSO",
+        "ids": [
+          "94376964"
+        ]
+      }
+    ],
+    "inCitations": [
+      "3cdacc6a7cf18b7189f41c65003ff808ecdf5b46",
+      "d3ff2b2318ecd81900dddb28c8703fa6c4c63e14",
+      "2e19a26b5be34259e332aec1c2269f426c71114c",
+      "04b90af1ecb82d69f11f6cd1565232772b837201",
+      "f68f5203493a523d0f8b0e98a8bb7db0a67833df",
+      "08fdb8b02870f6e5359cf34f4e749ad3e38b9b68",
+      "ae2718a23f0d1347299c39e807d33270a0bd0351",
+      "766f36c330b3f54cbce07bbe867e88c6dc9e45a7",
+      "40a305b0c47b89307a2622f76f1bf53c3b9cef11",
+      "065766018837994ea85d0b34f2631afc24aa36bc",
+      "2f601ddb2d05273e2a1a775d5fa4f1bf52f0dc32",
+      "f318aa0b627b62a3df4ad744e7b157eb0a6f6d03",
+      "f5135bec1c15cbf165b6b50e42df7e02fc741928",
+      "df5d481e5a913eb0c66db54eac86571107f7b8a5",
+      "2f65d7f1535ff9a267e05fca69939ef26c335a3a"
+    ],
+    "outCitations": [
+      "a8b520ecc812a90178a8950ed261ef80685efaf2",
+      "00cb2883f7786c92cddbece4aba9cb884a85c02b",
+      "e79ae2bbc42837479c09d7893d8ca260b1cff9a1",
+      "7f84edd195eaef4f826b76a29922fd99b5ebfac1",
+      "ffb2b145990b0754951f2235f660625048ec5970",
+      "fcd95f82d16a6e4967b65e9caf8b79d68e34f3b8",
+      "79b342f0e6fcc907a58758cb3a2459e7af98b710",
+      "650c5290a7279a6689cc1e0984cb3c86dda85ef3",
+      "2e8f7eaac127ec111e9874da55541718787fcd17",
+      "3fe08ca54407ff99d1f9d1f2c35fe92e73926486",
+      "8daca55ee68bb6367d446edbe3428c811d72084d",
+      "ea448289dde8fb2063eaa589492a5b5d13dbd11e",
+      "0fa37e25b9346d1cfb7cd4ca14d0eabdb54a86e0",
+      "0a2c629be05db5342b40d036e2436416b765aed7"
+    ],
+    "year": 1973,
+    "s2Url": "https://semanticscholar.org/paper/0cf511f26fa68244ed4055afee09a5af64c0a9ce",
+    "sources": [],
+    "pdfUrls": [],
+    "venue": "Nature",
+    "journalName": "Nature",
+    "journalVolume": "241",
+    "journalPages": "448-449",
+    "doi": "10.1038/241448A0",
+    "doiUrl": "https://doi.org/10.1038/241448A0",
+    "pmid": "",
+    "fieldsOfStudy": [
+      "Environmental Science"
+    ],
+    "magId": "2008806690",
+    "s2PdfUrl": "",
+    "entities": []
+  }
