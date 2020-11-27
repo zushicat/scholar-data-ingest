@@ -46,7 +46,7 @@ Getting files with curl (i.e. for OSX user):
 ```
 $ curl -O https://s3-us-west-2.amazonaws.com/ai2-s2-research-public/open-corpus/2020-11-06/manifest.txt
 ```
-- get individual files from manifest.txt listing (strongly recommended)
+- get individual files from manifest.txt listing (strongly recommended due to the amount of data)
 ```
 $ curl -O https://s3-us-west-2.amazonaws.com/ai2-s2-research-public/open-corpus/2020-11-06/s2-corpus-000.gz
 ```
