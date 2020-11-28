@@ -7,7 +7,7 @@ from werkzeug.wrappers import Request, Response
 from werkzeug.exceptions import HTTPException
 
 from .exceptions import InternalError
-from scholar_data_digest.process import ping
+from scholar_data_digest.process import ping, ingest_bulk_dispatch
 
 
 def http_exception(req: Request, e: HTTPException) -> Response:
@@ -34,6 +34,7 @@ def json_rpc_except(func: Callable) -> Callable:
 def application(request):
     try:
         dispatcher["ping"] = json_rpc_except(ping)
+        dispatcher["ingest.bulk"] = json_rpc_except(ingest_bulk_dispatch)
 
         response = JSONRPCResponseManager.handle(request.data, dispatcher)
         return (Response(response.json, mimetype="application/json"))

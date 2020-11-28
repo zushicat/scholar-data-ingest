@@ -1,3 +1,6 @@
-from ._my_application import ping
+from ._application import ping, ingest_bulk_dispatch
 
-__all__ = ["ping"]
+__all__ = [
+    "ingest_bulk_dispatch",
+    "ping"
+]
