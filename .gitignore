@@ -10,3 +10,5 @@ __pycache__/
 # ignore certain data stuff
 /data/tmp/
 /data/csv/
+
+!**/README.md
