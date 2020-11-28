@@ -7,7 +7,7 @@ from werkzeug.wrappers import Request, Response
 from werkzeug.exceptions import HTTPException
 
 from .exceptions import InternalError
-from scholar_data_digest.process import ping, ingest_bulk_dispatch
+from scholar_data_ingest.process import ping, ingest_bulk_dispatch
 
 
 def http_exception(req: Request, e: HTTPException) -> Response:

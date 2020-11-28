@@ -20,4 +20,4 @@ RUN cd /app/data && \
 
 EXPOSE 80
 
-CMD ["poetry", "run", "python", "-m", "scholar_data_digest.api"]
+CMD ["poetry", "run", "python", "-m", "scholar_data_ingest.api"]

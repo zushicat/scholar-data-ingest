@@ -25,6 +25,5 @@ pyproject.lock
 
 data/.venv
 data/model.latin
-data/foodgraph
 data/csv
 data/tmp

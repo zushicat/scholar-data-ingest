@@ -59,11 +59,9 @@ CREATE TABLE public.paper (
     paper_id text NOT NULL,
     year_published integer,
     author_ids text NOT NULL,
-    text_ids text NOT NULL,
     research_fields text,
-    language text,
-    cited_paper_ids text,
-    cited_by_paper_ids text
+    is_cited_ids text,
+    has_cited_ids text
 );
 
 
@@ -96,7 +94,8 @@ CREATE TABLE public.text (
     text_id text NOT NULL,
     paper_id text NOT NULL,
     title text NOT NULL,
-    abstract text
+    abstract text,
+    language text
 );
 
 

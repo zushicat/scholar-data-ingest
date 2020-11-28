@@ -4,6 +4,17 @@ Content-Type: application/json
 {
     "jsonrpc": "2.0",
     "id": 12345,
-    "method": "ping",
-    "params": {}
+    "method": "ingest.bulk",
+    "params": {
+        "files": [
+            "test-data"
+        ]
+    }
 }
+
+# {
+#     "jsonrpc": "2.0",
+#     "id": 12345,
+#     "method": "ping",
+#     "params": {}
+# }

@@ -1,7 +1,7 @@
 [tool.poetry]
-name = "scholar-data-digest"
+name = "scholar-data-ingest"
 version = "0.1.0"
-description = "Request and digest academic papers."
+description = "Request and ingest academic papers."
 readme = "README.md"
 authors = ["zushicat2000"]
 

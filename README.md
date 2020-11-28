@@ -1,5 +1,5 @@
-# scholar-data-digest
-Request and digest data of academic papers into a postgreSQL database instance.    
+# scholar-data-ingest
+Request and ingest data of academic papers into a postgreSQL database instance.    
 
 Right now, this is limited to data from [Semantic Scholar](https://www.semanticscholar.org/).    
 See also:
@@ -10,9 +10,7 @@ See also:
 ## Install
 
 ### Prerequisite
-- sudo pip3 install black
-- sudo pip3 install poetry
-- in case of docker problems, try: docker --> preferences --> allowcate more memory
+In case of docker problems, try: docker --> preferences --> allowcate more memory
 
 ### Build and start container (API and PostgreSQL DB)
 ```
@@ -33,7 +31,8 @@ Right now, following ports are used:
 
 ### Bulk ingest
 Semantic Scholar offers a bulk download divided into around 6000 batches with 30000 JSON line entries each.
-To digest these files, it is assumed that you download and decrompress the files of interest into some data directory. All files passed by Rest API method call will be digested into the database instance named "scholar".
+To ingest these files, it is assumed that you download and decrompress the files of interest into the directory /data/tmp.    
+All files passed by Rest API method call will be ingested into the database instance named "scholar".
 
 See chapter "Rest API requests" below on how to initiate the process.    
 

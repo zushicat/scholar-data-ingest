@@ -2,7 +2,7 @@
 version: '3'
 services:
   api:
-    container_name: scholar_digest_API
+    container_name: scholar_ingest_API
     build: .
     env_file:
       - .env
@@ -12,7 +12,7 @@ services:
       - .:/app
 
   database:
-    container_name: scholar_digest_DB
+    container_name: scholar_ingest_DB
     image: "postgres"
     env_file:
       - .env
