@@ -4,6 +4,7 @@ WORKDIR /app
 
 ENV PYTHONDONTWRITEBYTECODE=1 \
     PYTHONPATH=/app/src \
+    MODEL_LOCATION=/data \
     DATA_LOCATION=./data
 
 COPY pyproject.toml .
