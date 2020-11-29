@@ -16,6 +16,9 @@ LABELS = None
 PARAM = None
 
 
+DIRNAME = os.environ["MODEL_LOCATION"]
+
+
 def check_loaded_model():
     # feature calculation is quite expensive
     global FEATURES
@@ -23,15 +26,13 @@ def check_loaded_model():
     global LABELS
     global PARAM
 
-    dirname = os.environ["DATA_LOCATION"]
-
     if FEATURES is None:
-        if os.path.exists(f"{dirname}/model.latin/features.pickle"):
-            with open(f"{dirname}/model.latin/features.pickle", "rb") as file:
+        if os.path.exists(f"{DIRNAME}/model.latin/features.pickle"):
+            with open(f"{DIRNAME}/model.latin/features.pickle", "rb") as file:
                 FEATURES = pickle.load(file)
         else:
             FEATURES = load_features()
-            with open(f"{dirname}/model.latin/features.pickle", "wb") as file:
+            with open(f"{DIRNAME}/model.latin/features.pickle", "wb") as file:
                 pickle.dump(FEATURES, file)
 
     if TRIE is None:
@@ -39,7 +40,7 @@ def check_loaded_model():
     if LABELS is None:
         LABELS = load_labels()
     if PARAM is None:
-        PARAM = numpy.load(f"{dirname}/model.latin/parameters.npy")
+        PARAM = numpy.load(f"{DIRNAME}/model.latin/parameters.npy")
 
     return FEATURES, TRIE, LABELS, PARAM
 
@@ -207,16 +208,14 @@ def normalize_text(org):
 
 
 def load_da():
-    dirname = os.environ["DATA_LOCATION"]
     trie = da.DoubleArray()
-    trie.load(f"{dirname}/model.latin/doublearray.npz")
+    trie.load(f"{DIRNAME}/model.latin/doublearray.npz")
     return trie
 
 
 def load_features():
-    dirname = os.environ["DATA_LOCATION"]
     features = []
-    with codecs.open(f"{dirname}/model.latin/features", "rb", "utf-8") as f:
+    with codecs.open(f"{DIRNAME}/model.latin/features", "rb", "utf-8") as f:
         pre_feature = ()
         for n, s in enumerate(f):
             m = re.match(r"(.+)\t([0-9]+)", s)
@@ -230,8 +229,7 @@ def load_features():
 
 
 def load_labels():
-    dirname = os.environ["DATA_LOCATION"]
-    with open(f"{dirname}/model.latin/labels.json", "r") as f:
+    with open(f"{DIRNAME}/model.latin/labels.json", "r") as f:
         return json.load(f)
 
 
