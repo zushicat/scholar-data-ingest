@@ -51,7 +51,7 @@ $ curl -O https://s3-us-west-2.amazonaws.com/ai2-s2-research-public/open-corpus/
 ```
 
 ## Semantic Scholar JSON
-Check out this [JSON example](readme_files/semantic_scholar_corpus_entry_example.json) of the incoming data from corpus download.
+Check out this [JSON example](readme_files/semantic_scholar_corpus_entry_example.json) of  incoming data from corpus download.
 
 ## Database schema
 ![Database schema](readme_files/database_schema.png)
