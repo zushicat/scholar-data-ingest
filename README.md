@@ -56,6 +56,8 @@ Check out this [JSON example](readme_files/semantic_scholar_corpus_entry_example
 ## Database schema
 ![Database schema](readme_files/database_schema.png)
 
+When the container is build, an empty database instance will be created with [this schema SQL file](data/postgres/schema.sql).
+
 ## Rest API requests
 
 ### ping
