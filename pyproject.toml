@@ -9,6 +9,7 @@ authors = ["zushicat2000"]
 python = "~3.7"
 
 json-rpc = "^1.13.0"
+numpy = "^1.19.4"
 psycopg2 = "^2.8.6"
 requests = "^2.25.0"
 Werkzeug = "^1.0.1"
