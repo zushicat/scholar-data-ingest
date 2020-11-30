@@ -25,7 +25,6 @@ SET default_tablespace = '';
 CREATE TABLE public.author (
     id integer NOT NULL,
     author_id text NOT NULL,
-    paper_ids text NOT NULL,
     name text NOT NULL
 );
 
@@ -59,6 +58,7 @@ CREATE TABLE public.paper (
     paper_id text NOT NULL,
     year_published integer,
     author_ids text NOT NULL,
+    text_id text NOT NULL,
     research_fields text,
     is_cited_ids text,
     has_cited_ids text
