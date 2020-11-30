@@ -10,7 +10,7 @@ See also:
 ## Install
 
 ### Prerequisite
-In case of docker problems, try: docker --> preferences --> allowcate more memory
+In case of docker problems, try: docker --> preferences --> allocate more memory
 
 ### Build and start container (API and PostgreSQL DB)
 ```
