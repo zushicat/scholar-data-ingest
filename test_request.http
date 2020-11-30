@@ -4,13 +4,28 @@ Content-Type: application/json
 {
     "jsonrpc": "2.0",
     "id": 12345,
-    "method": "ingest.bulk",
+    "method": "truncate",
     "params": {
-        "files": [
-            "test-data"
+        "table_names": [
+            "text",
+            "author",
+            "paper"
         ]
     }
 }
+
+# {
+#     "jsonrpc": "2.0",
+#     "id": 12345,
+#     "method": "ingest.bulk",
+#     "params": {
+#         "files": [
+#             "s2-corpus-000",
+#             "s2-corpus-001"
+#         ],
+#         "use_lang_detection": true
+#     }
+# }
 
 # {
 #     "jsonrpc": "2.0",

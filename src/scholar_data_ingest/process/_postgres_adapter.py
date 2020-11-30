@@ -4,7 +4,8 @@ from random import randrange
 from typing import Any, Dict, List, Set
 
 import psycopg2
-from psycopg2.extensions import AsIs  # https://stackoverflow.com/a/29471241
+# from psycopg2.extensions import AsIs  # https://stackoverflow.com/a/29471241
+from psycopg2.extras import execute_values  # https://stackoverflow.com/a/54949835
 
 
 _LOGGER = logging.getLogger(__package__)
@@ -21,8 +22,9 @@ CONNECTION = psycopg2.connect(
 )
 
 
-def write_initial_DB(table_name: str, data: Dict[str, Any], reference_id_name: str) -> bool:
+def db_insert_into_table(table_name: str, data: Dict[str, Any], reference_id_name: str) -> bool:
     '''
+    ! NOT USED !
     Generic insert statement from dict: https://stackoverflow.com/a/29471241
     Check if reference_id is already in table. (Can be single or comma separated string.)
     If existing: write entry (return True)
@@ -64,3 +66,29 @@ def write_initial_DB(table_name: str, data: Dict[str, Any], reference_id_name: s
         CONNECTION.commit()
         return False
 
+
+def db_bulk_insert_into_table(table_name: str, data: List[Dict[str, Any]]) -> bool:
+    '''
+    Write entries in bulk.
+    See: https://stackoverflow.com/a/54949835
+    '''
+    cursor = CONNECTION.cursor()
+    
+    columns = ",".join(list(data[0].keys()))
+    sql_query = f"INSERT INTO {table_name} ({columns}) VALUES %s"
+    values = [[v for v in d.values()] for d in data]
+
+    execute_values(cursor, sql_query, values)
+    CONNECTION.commit()
+
+
+def db_truncate_table(table_name: str) -> bool:
+    try:
+        cursor = CONNECTION.cursor()
+        sql_query = f"TRUNCATE TABLE {table_name}; ALTER SEQUENCE {table_name}_id_seq RESTART WITH 1"
+        cursor.execute(sql_query)
+        CONNECTION.commit()
+
+        return True
+    except Exception as e:
+        return False

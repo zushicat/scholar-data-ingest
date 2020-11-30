@@ -4,36 +4,21 @@ import logging
 from typing import Any, Dict, List, Optional, Tuple
 import uuid
 
-from ._postgres_adapter import write_initial_DB
+from ._postgres_adapter import db_bulk_insert_into_table, db_truncate_table
 from ldig import ldig
 
 
 _LOGGER = logging.getLogger(__package__)
 DIRNAME = os.environ["DATA_LOCATION"]
+USE_LANG_DETECTION = False
 
 ldig.check_loaded_model()
 
 
 # *******
-# write into DB tables (with _postgres_adapter methods)
+# cc
 # *******
-def _write_table_text(data: Dict[str, Any]) -> None:
-    is_written: bool = write_initial_DB("text", data, "paper_id")
-    
-
-def _write_table_author(data: Dict[str, Any]) -> None:
-    is_written: bool = write_initial_DB("author", data, "author_ids")
-    # _LOGGER.info(f"----> {is_written}")
-
-
-def _write_table_paper(data: Dict[str, Any]) -> None:
-    is_written: bool = write_initial_DB("paper", data, "paper_id")
-
-
-# *******
-# initiate DB entries of line
-# *******
-def _set_db_entry(data: Dict[str, Any]) -> bool:
+def _create_table_entries(data: Dict[str, Any], use_lang_detection: bool=False) -> Tuple[Optional[Dict[str, Any]], Optional[Dict[str, Any]], Optional[List[Dict[str, Any]]]]:
     try:
         # ***
         # check if entry is valid: MUST have a title and min. 1 author
@@ -45,45 +30,52 @@ def _set_db_entry(data: Dict[str, Any]) -> bool:
 
         text_id: str = str(uuid.uuid4())
 
+        detected_language: Optional[str] = None
+
         # ***
         # check for language
         # ***
-        check_title: str = data["title"]  # "私は猫で幸せです。"
-        check_abstract: str = data["paperAbstract"] if data["paperAbstract"] is not None else ""
-        detected_language, confidence = ldig.detect(f"{check_title} {check_abstract}")
+        if use_lang_detection is True:
+            try:
+                shortened_title: str = " ".join(data["title"].split(" ")[:4])  # use the first n words
+            except Exception:
+                shortened_title: str = data["title"]
+            detected_language, confidence = ldig.detect(shortened_title)
+            
+            if confidence < 0.5:  # needs to be confident enough
+                detected_language = None
         
-        if confidence < 0.5:  # needs to be confident enough
-            detected_language = None
-        
+
         # set empty abstract entry to None
         data["paperAbstract"] = None if data["paperAbstract"] is None or len(data["paperAbstract"]) == 0 else data["paperAbstract"]
 
         # ***
-        # process table text entry
+        # 
         # ***
-        _write_table_text({
+        table_text_entry = {
             "text_id": text_id,
             "paper_id": data["id"],
             "title": data["title"],
             "abstract": data["paperAbstract"],
             "language": detected_language
-        })
+        }
 
         # ***
-        # process table author entries
+        # 
         # ***
         all_author_ids = []  # collect ids
+        table_author_entries: List[Dict[str, Any]] = []
         for author in data["authors"]:
             all_author_ids += author["ids"]
-            _write_table_author({
+            table_author_entries.append({
                 "author_ids": ",".join(author["ids"]),
                 "name": author["name"]
             })
 
         # ***
-        # process table paper entry
+        # 
         # ***
-        _write_table_paper({
+        table_paper_entry = {
             "paper_id": data["id"],
             "year_published": data["year"],
             "author_ids": ",".join(all_author_ids),
@@ -91,41 +83,61 @@ def _set_db_entry(data: Dict[str, Any]) -> bool:
             "text_id": text_id,
             "is_cited_ids": ",".join(data["inCitations"]) if len(data["inCitations"]) > 0 else None,
             "has_cited_ids": ",".join(data["outCitations"]) if len(data["outCitations"]) > 0 else None
-        })
+        }
         
-        return True
+        return table_paper_entry, table_text_entry, table_author_entries
     except Exception as e:
         _LOGGER.info(f"ERROR ---> {e}")
-        return False
-
+        return None, None, None
 
 # *******
-# process all incoming bulk data per line
+# process all incoming bulk data per line (dict -> DB schema)
+# write bulk in DB
 # *******
-def _process_bulk_file(filename: str) -> Tuple[Optional[int], Optional[int]]:
-    '''
-    Process lines of single bulk JSON line file (approx. 30000 lines).
-    Write each parsed line directly into DB (with method: _set_db_entry).
-    '''
+def _process_bulk_file(filename: str) -> None:
+    table_paper_data: List[Dict[str, Any]] = []
+    table_text_data: List[Dict[str, Any]] = []
+    table_author_data: List[Dict[str, Any]] = []
     try:
-        count_written_ok: int = 0
         with open(f"{DIRNAME}/tmp/{filename}") as f:
             lines: List[str] = f.read().split("\n")
-        for line in lines:
+        for i, line in enumerate(lines):
+            if i%1000 == 0:
+                _LOGGER.info(f"-- {i} --")
+
             try:
                 line_data: Dict[str, Any] = json.loads(line)
-                if _set_db_entry(line_data) is True:
-                    count_written_ok += 1
+                table_paper_entry, table_text_entry, table_author_entries = _create_table_entries(data=line_data, use_lang_detection=USE_LANG_DETECTION)
+            
+                table_paper_data.append(table_paper_entry)
+                table_text_data.append(table_text_entry)
+                table_author_data += table_author_entries
+            
             except Exception as e:
                 # _LOGGER.info(f"ERROR 1 ---> {e}")
                 continue
-        return count_written_ok, len(lines)
     except Exception as e:
         # _LOGGER.info(f"ERROR 0 ---> {e}")
-        return None, None
+        pass
+    
+    db_bulk_insert_into_table("paper", table_paper_data)
+    db_bulk_insert_into_table("text", table_text_data)
+    db_bulk_insert_into_table("author", table_author_data)
 
 
-def ingest_bulk(filenames: str) -> None:
+def ingest_bulk(filenames: str, use_lang_detection: bool) -> None:
+    '''
+    TODO: use COPY for bulk import into DB instead of INSERT (in DB adapter)
+    '''
+    global USE_LANG_DETECTION
+
+    USE_LANG_DETECTION = use_lang_detection
     for filename in filenames:
-        count_processed, count_all = _process_bulk_file(filename)
-        _LOGGER.info(f"{count_processed}, {count_all}")
+        _LOGGER.info(f"Process ---> {filename}")
+        _process_bulk_file(filename)
+        
+        _LOGGER.info(f"Done.")
+
+def truncate_table(table_names: List[str]) -> None:
+    for table_name in table_names:
+        db_truncate_table(table_name)

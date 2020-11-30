@@ -1,6 +1,7 @@
-from ._application import ping, ingest_bulk_dispatch
+from ._application import ingest_bulk_dispatch, truncate_table_dispatch, ping
 
 __all__ = [
     "ingest_bulk_dispatch",
-    "ping"
+    "ping",
+    "truncate_table_dispatch"
 ]

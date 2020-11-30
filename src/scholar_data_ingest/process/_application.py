@@ -2,7 +2,7 @@ import logging
 from typing import Any, Dict, List, Tuple
 
 # from ._postgres_adapter import test
-from ._ingester import ingest_bulk
+from ._ingester import ingest_bulk, truncate_table
 
 _LOGGER = logging.getLogger(__package__)
 
@@ -17,6 +17,14 @@ def ping() -> Dict[str, str]:
 # ****
 #
 # ****
-def ingest_bulk_dispatch(files: str) -> Dict[str, str]:
-    ingest_bulk(files)
+def ingest_bulk_dispatch(files: str, use_lang_detection: bool) -> Dict[str, str]:
+    ingest_bulk(files, use_lang_detection)
     return {"status": "ok", "response": "ingested"}
+
+
+# ****
+#
+# ****
+def truncate_table_dispatch(table_names: str) -> Dict[str, str]:
+    truncate_table(table_names)
+    return {"status": "ok", "response": "truncated"}
