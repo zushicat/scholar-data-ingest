@@ -14,10 +14,9 @@ In case of docker problems, try: docker --> preferences --> allowcate more memor
 
 ### Build and start container (API and PostgreSQL DB)
 ```
-$ docker-compose up --build
+$ docker-compose up
 ```
-(When the container is build, you may drop the --build parameter in case of re-starting the container.)    
-
+  
 Both the Rest API and the postgreSQL database should be running after the building process. (This may take a while.)    
 
 Right now, following ports are used:
@@ -97,8 +96,48 @@ Content-Type: application/json
     "id": 12345,
     "method": "ingest.bulk",
     "params": {
-        "filepaths": [
-            "/Users/karin/programming/data/academic_paper/semanticscholar/s2-corpus-000"
+        "files": [
+            "s2-corpus-000",
+            "s2-corpus-001"
+        ],
+        "use_lang_detection": true
+    }
+}
+```
+- files: Names of bulk files in /data/tmp
+- use_lang_detection: use language detection, applied on each title
+
+For detection of short texts, a modified version of [ldig](https://github.com/shuyo/ldig) is used (latin text model only).    
+
+Response
+```
+{
+  "result": {
+    "status": "ok",
+    "response": "ingested"
+  },
+  "id": 12345,
+  "jsonrpc": "2.0"
+}
+```
+
+### truncate
+Truncate passed tables and reset index to 1.
+
+Request
+```
+POST http://localhost:8080
+Content-Type: application/json
+
+{
+    "jsonrpc": "2.0",
+    "id": 12345,
+    "method": "truncate",
+    "params": {
+        "table_names": [
+            "text",
+            "author",
+            "paper"
         ]
     }
 }
@@ -106,5 +145,12 @@ Content-Type: application/json
 
 Response
 ```
-SOMETHING
+{
+  "result": {
+    "status": "ok",
+    "response": "truncated"
+  },
+  "id": 12345,
+  "jsonrpc": "2.0"
+}
 ```
