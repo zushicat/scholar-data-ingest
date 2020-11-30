@@ -1,5 +1,5 @@
 # scholar-data-ingest
-Request and ingest data of academic papers into a postgreSQL database instance.    
+Ingest data of academic papers into a postgreSQL database instance.    
 
 Right now, this is limited to data from [Semantic Scholar](https://www.semanticscholar.org/).    
 See also:
