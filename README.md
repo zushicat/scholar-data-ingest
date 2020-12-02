@@ -57,7 +57,8 @@ Check out this [JSON example](readme_files/semantic_scholar_corpus_entry_example
 
 When the container is build, an empty database instance will be created with [this schema SQL file](data/postgres/schema.sql).
 
-## Rest API requests
+## Rest API requests / responses
+As of now, the responses are not terribly informative.
 
 ### ping
 Request
@@ -86,6 +87,8 @@ Response
 ```
 
 ### ingest.bulk
+As of now, in case of id conflict (on the respective table) the new entry will simply be ignored.    
+
 Request
 ```
 POST http://localhost:8080
@@ -149,6 +152,40 @@ Response
   "result": {
     "status": "ok",
     "response": "truncated"
+  },
+  "id": 12345,
+  "jsonrpc": "2.0"
+}
+```
+
+### export.csv
+Export table as csv files to /data/csv (using the table name as file name).    
+
+Request
+```
+POST http://localhost:8080
+Content-Type: application/json
+
+{
+    "jsonrpc": "2.0",
+    "id": 12345,
+    "method": "export.csv",
+    "params": {
+        "table_names": [
+            "text",
+            "author",
+            "paper"
+        ]
+    }
+}
+```
+
+Response
+```
+{
+  "result": {
+    "status": "ok",
+    "response": "csv exported"
   },
   "id": 12345,
   "jsonrpc": "2.0"
