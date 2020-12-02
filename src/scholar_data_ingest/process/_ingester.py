@@ -5,18 +5,18 @@ from typing import Any, Dict, List, Optional, Tuple
 import uuid
 
 from ._postgres_adapter import db_bulk_insert_into_table, db_truncate_table
-from ldig import ldig
+from ldig import ldig  # language detection
 
 
 _LOGGER = logging.getLogger(__package__)
 DIRNAME = os.environ["DATA_LOCATION"]
 USE_LANG_DETECTION = False
 
-ldig.check_loaded_model()
+ldig.check_loaded_model()  # load latin model for language detection
 
 
 # *******
-# cc
+# create data according to DB schema per line
 # *******
 def _create_table_entries(data: Dict[str, Any], use_lang_detection: bool=False) -> Tuple[Optional[Dict[str, Any]], Optional[Dict[str, Any]], Optional[List[Dict[str, Any]]]]:
     try:
@@ -63,14 +63,28 @@ def _create_table_entries(data: Dict[str, Any], use_lang_detection: bool=False) 
         # ***
         # 
         # ***
-        all_author_ids = []  # collect ids
+        all_author_ids = []  # collect ids, keep order of authors
         table_author_entries: List[Dict[str, Any]] = []
+
         for author in data["authors"]:
-            all_author_ids += author["ids"]
-            table_author_entries.append({
-                "author_ids": ",".join(author["ids"]),
-                "name": author["name"]
-            })
+            '''
+            author["ids"] is List[str], therefore make redundant entries if number of ids > 1
+            Also, only use the first author id in paper reference.
+            (The case of redundant entries may never happen, but is theoretically possible.)
+            '''
+            for i, current_id in enumerate(author["ids"]):
+                if i == 0:
+                    all_author_ids.append(current_id)
+
+                also_referring_ids = ",".join([x for x in author["ids"] if x != current_id])
+                if len(also_referring_ids) == 0:
+                    also_referring_ids = None
+                
+                table_author_entries.append({
+                    "author_id": current_id,
+                    "name": author["name"],
+                    "also_referring_ids": also_referring_ids
+                })
 
         # ***
         # 
@@ -103,7 +117,7 @@ def _process_bulk_file(filename: str) -> None:
             lines: List[str] = f.read().split("\n")
         for i, line in enumerate(lines):
             if i%1000 == 0:
-                _LOGGER.info(f"-- {i} --")
+                _LOGGER.info(f"-- {filename} {i} --")
 
             try:
                 line_data: Dict[str, Any] = json.loads(line)
@@ -120,6 +134,10 @@ def _process_bulk_file(filename: str) -> None:
         # _LOGGER.info(f"ERROR 0 ---> {e}")
         pass
     
+    # _LOGGER.info(f"---> {table_paper_data}")
+    # _LOGGER.info(f"---> {table_author_data}")
+    # _LOGGER.info(f"---> {table_text_data}")
+
     db_bulk_insert_into_table("paper", table_paper_data)
     db_bulk_insert_into_table("text", table_text_data)
     db_bulk_insert_into_table("author", table_author_data)

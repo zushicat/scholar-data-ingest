@@ -71,11 +71,14 @@ def db_bulk_insert_into_table(table_name: str, data: List[Dict[str, Any]]) -> bo
     '''
     Write entries in bulk.
     See: https://stackoverflow.com/a/54949835
+    As for now: simply ignore in case of (id) confict (instead of update).
     '''
     cursor = CONNECTION.cursor()
+
+    id_reference: str = f"{table_name}_id"
     
     columns = ",".join(list(data[0].keys()))
-    sql_query = f"INSERT INTO {table_name} ({columns}) VALUES %s"
+    sql_query = f"INSERT INTO {table_name} ({columns}) VALUES %s ON CONFLICT ({id_reference}) DO NOTHING;"
     values = [[v for v in d.values()] for d in data]
 
     execute_values(cursor, sql_query, values)
