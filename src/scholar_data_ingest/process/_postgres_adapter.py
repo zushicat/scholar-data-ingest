@@ -9,7 +9,8 @@ from psycopg2.extras import execute_values  # https://stackoverflow.com/a/549498
 
 
 _LOGGER = logging.getLogger(__package__)
-# _LOGGER.info(f"------> {os.environ}")
+
+DIRNAME = os.environ["DATA_LOCATION"]
 
 POSTGRES_USER = os.environ.get("POSTGRES_USER")
 POSTGRES_PASSWORD = os.environ.get("POSTGRES_PASSWORD")
@@ -95,3 +96,15 @@ def db_truncate_table(table_name: str) -> bool:
         return True
     except Exception as e:
         return False
+
+
+def db_export_table_csv(table_name: str) -> bool:
+    '''
+    See: https://stackoverflow.com/a/22789702
+    '''
+    # _LOGGER.info(f"DIRNAME ---> {DIRNAME}")
+    cursor = CONNECTION.cursor()
+
+    sql_query = f"COPY (SELECT * FROM {table_name}) TO STDOUT WITH CSV HEADER FORCE QUOTE *;"
+    with open(f"{DIRNAME}/csv/{table_name}.csv", "w", newline="") as f:
+        cursor.copy_expert(sql_query, f)

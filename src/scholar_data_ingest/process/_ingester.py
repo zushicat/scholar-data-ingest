@@ -4,7 +4,7 @@ import logging
 from typing import Any, Dict, List, Optional, Tuple
 import uuid
 
-from ._postgres_adapter import db_bulk_insert_into_table, db_truncate_table
+from ._postgres_adapter import db_bulk_insert_into_table, db_export_table_csv, db_truncate_table
 from ldig import ldig  # language detection
 
 
@@ -35,9 +35,10 @@ def _create_table_entries(data: Dict[str, Any], use_lang_detection: bool=False) 
         # ***
         # check for language
         # ***
+        used_words_for_lang_detection = 6
         if use_lang_detection is True:
             try:
-                shortened_title: str = " ".join(data["title"].split(" ")[:4])  # use the first n words
+                shortened_title: str = " ".join(data["title"].split(" ")[:used_words_for_lang_detection])  # use the first n words
             except Exception:
                 shortened_title: str = data["title"]
             detected_language, confidence = ldig.detect(shortened_title)
@@ -52,11 +53,16 @@ def _create_table_entries(data: Dict[str, Any], use_lang_detection: bool=False) 
         # ***
         # 
         # ***
+        # There are abstract texts with linebreaks: remove
+        abstract = data["paperAbstract"]
+        if abstract is not None:
+            abstract = " ".join((data["paperAbstract"]).split("\n"))
+
         table_text_entry = {
             "text_id": text_id,
             "paper_id": data["id"],
             "title": data["title"],
-            "abstract": data["paperAbstract"],
+            "abstract": abstract,
             "language": detected_language
         }
 
@@ -156,6 +162,13 @@ def ingest_bulk(filenames: str, use_lang_detection: bool) -> None:
         
         _LOGGER.info(f"Done.")
 
+
 def truncate_table(table_names: List[str]) -> None:
     for table_name in table_names:
         db_truncate_table(table_name)
+
+
+def export_table_csv(table_names: List[str]) -> None:
+    for table_name in table_names:
+        db_export_table_csv(table_name)
+        # _LOGGER.info(f"EXPORT ----> {table_name}")

@@ -88,6 +88,7 @@ Response
 
 ### ingest.bulk
 As of now, in case of id conflict (on the respective table) the new entry will simply be ignored.    
+If you use language detection, ingesting will take considerably longer, depending on the number of words. (See: used_words_for_lang_detection in _ingester._create_table_entries)    
 
 Request
 ```

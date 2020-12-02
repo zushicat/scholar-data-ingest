@@ -4,7 +4,7 @@ Content-Type: application/json
 {
     "jsonrpc": "2.0",
     "id": 12345,
-    "method": "truncate",
+    "method": "export.csv",
     "params": {
         "table_names": [
             "text",
@@ -13,6 +13,19 @@ Content-Type: application/json
         ]
     }
 }
+
+# {
+#     "jsonrpc": "2.0",
+#     "id": 12345,
+#     "method": "truncate",
+#     "params": {
+#         "table_names": [
+#             "text",
+#             "author",
+#             "paper"
+#         ]
+#     }
+# }
 
 # {
 #     "jsonrpc": "2.0",
