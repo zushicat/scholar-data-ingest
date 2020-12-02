@@ -24,8 +24,9 @@ SET default_tablespace = '';
 
 CREATE TABLE public.author (
     id integer NOT NULL,
-    author_ids text NOT NULL,
-    name text NOT NULL
+    author_id text NOT NULL,
+    name text NOT NULL,
+    also_referring_ids text
 );
 
 
