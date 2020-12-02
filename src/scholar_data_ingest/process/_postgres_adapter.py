@@ -106,5 +106,5 @@ def db_export_table_csv(table_name: str) -> bool:
     cursor = CONNECTION.cursor()
 
     sql_query = f"COPY (SELECT * FROM {table_name}) TO STDOUT WITH CSV HEADER FORCE QUOTE *;"
-    with open(f"{DIRNAME}/csv/{table_name}.csv", "w", newline="") as f:
+    with open(f"{DIRNAME}/csv/{table_name}.csv", "w") as f:
         cursor.copy_expert(sql_query, f)
