@@ -110,7 +110,9 @@ def _create_table_entries(data: Dict[str, Any], use_lang_detection: bool=False) 
             "research_fields": ",".join(data["fieldsOfStudy"]),
             "text_id": text_id,
             "is_cited_ids": ",".join(data["inCitations"]) if len(data["inCitations"]) > 0 else None,
-            "has_cited_ids": ",".join(data["outCitations"]) if len(data["outCitations"]) > 0 else None
+            "has_cited_ids": ",".join(data["outCitations"]) if len(data["outCitations"]) > 0 else None,
+            "number_has_cited": len(data["outCitations"]),
+            "number_is_cited": len(data["inCitations"])
         }
         
         return table_paper_entry, table_text_entry, table_author_entries
