@@ -103,6 +103,17 @@ def db_export_table_csv(table_name: str) -> bool:
     # _LOGGER.info(f"DIRNAME ---> {DIRNAME}")
     cursor = CONNECTION.cursor()
 
-    sql_query = f"COPY (SELECT * FROM {table_name}) TO STDOUT WITH CSV HEADER FORCE QUOTE *;"
+    # ***
+    # use quotes for selected columns, only
+    # ***
+    use_quotes_sql = ""
+    if table_name in ["text", "author"]:
+        if table_name == "text":
+            columns_in_quotes = "title,abstract"
+        if table_name == "author":
+            columns_in_quotes = "name"
+        use_quotes_sql = f" FORCE QUOTE {columns_in_quotes}"
+
+    sql_query = f"COPY (SELECT * FROM {table_name}) TO STDOUT WITH CSV HEADER{use_quotes_sql};"
     with open(f"{DIRNAME}/csv/{table_name}.csv", "w") as f:
         cursor.copy_expert(sql_query, f)
