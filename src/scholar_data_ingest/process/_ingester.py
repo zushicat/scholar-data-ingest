@@ -151,11 +151,11 @@ def _process_bulk_file(filename: str) -> None:
     
     # _LOGGER.info(f"---> {table_paper_data}")
     # _LOGGER.info(f"---> {table_author_data}")
-    _LOGGER.info(f"---> {table_text_data}")
+    # _LOGGER.info(f"---> {table_text_data}")
 
-    # db_bulk_insert_into_table("paper", table_paper_data)
-    # db_bulk_insert_into_table("text", table_text_data)
-    # db_bulk_insert_into_table("author", table_author_data)
+    db_bulk_insert_into_table("paper", table_paper_data)
+    db_bulk_insert_into_table("text", table_text_data)
+    db_bulk_insert_into_table("author", table_author_data)
 
 
 def ingest_bulk(filenames: str, use_lang_detection: bool) -> None:
