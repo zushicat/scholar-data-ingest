@@ -184,10 +184,10 @@ CREATE UNIQUE INDEX paper_paper_id_idx ON public.paper USING btree (paper_id);
 
 
 --
--- Name: text_text_id_idx; Type: INDEX; Schema: public; Owner: -
+-- Name: text_paper_id_idx; Type: INDEX; Schema: public; Owner: -
 --
 
-CREATE UNIQUE INDEX text_text_id_idx ON public.text USING btree (text_id);
+CREATE UNIQUE INDEX text_paper_id_idx ON public.text USING btree (paper_id);
 
 
 --
