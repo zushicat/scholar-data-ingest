@@ -95,10 +95,17 @@ def _create_table_entries(data: Dict[str, Any], use_lang_detection: bool=False) 
         # ***
         # 
         # ***
+        last_author_id: str = all_author_ids[-1] if len(all_author_ids) > 1 else None
+        co_authors_ids: str = ",".join(all_author_ids[1:-1]) if len(all_author_ids) > 2 else None
+
         table_paper_entry = {
             "paper_id": data["id"],
             "year_published": data["year"],
             "author_ids": ",".join(all_author_ids),
+            "number_authors": len(all_author_ids),
+            "first_author_id": all_author_ids[0],
+            "last_author_id": last_author_id,
+            "co_authors_ids": co_authors_ids,
             "research_fields": ",".join(data["fieldsOfStudy"]),
             "text_id": text_id,
             "is_cited_ids": ",".join(data["inCitations"]) if len(data["inCitations"]) > 0 else None,
@@ -121,7 +128,7 @@ def _process_bulk_file(filename: str) -> None:
     try:
         with open(f"{DIRNAME}/tmp/{filename}") as f:
             lines: List[str] = f.read().split("\n")
-        for i, line in enumerate(lines):
+        for i, line in enumerate(lines[:1]):
             if i%1000 == 0:
                 _LOGGER.info(f"-- {filename} {i} --")
 
@@ -129,9 +136,10 @@ def _process_bulk_file(filename: str) -> None:
                 line_data: Dict[str, Any] = json.loads(line)
                 table_paper_entry, table_text_entry, table_author_entries = _create_table_entries(data=line_data, use_lang_detection=USE_LANG_DETECTION)
             
-                table_paper_data.append(table_paper_entry)
-                table_text_data.append(table_text_entry)
-                table_author_data += table_author_entries
+                if table_paper_entry is not None:  # all are None, see exception above
+                    table_paper_data.append(table_paper_entry)
+                    table_text_data.append(table_text_entry)
+                    table_author_data += table_author_entries
             
             except Exception as e:
                 # _LOGGER.info(f"ERROR 1 ---> {e}")
@@ -140,13 +148,13 @@ def _process_bulk_file(filename: str) -> None:
         # _LOGGER.info(f"ERROR 0 ---> {e}")
         pass
     
-    # _LOGGER.info(f"---> {table_paper_data}")
+    _LOGGER.info(f"---> {table_paper_data}")
     # _LOGGER.info(f"---> {table_author_data}")
     # _LOGGER.info(f"---> {table_text_data}")
 
-    db_bulk_insert_into_table("paper", table_paper_data)
-    db_bulk_insert_into_table("text", table_text_data)
-    db_bulk_insert_into_table("author", table_author_data)
+    # db_bulk_insert_into_table("paper", table_paper_data)
+    # db_bulk_insert_into_table("text", table_text_data)
+    # db_bulk_insert_into_table("author", table_author_data)
 
 
 def ingest_bulk(filenames: str, use_lang_detection: bool) -> None:
