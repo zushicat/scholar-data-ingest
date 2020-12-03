@@ -129,7 +129,7 @@ def _process_bulk_file(filename: str) -> None:
     try:
         with open(f"{DIRNAME}/tmp/{filename}") as f:
             lines: List[str] = f.read().split("\n")
-        for i, line in enumerate(lines[:2]):
+        for i, line in enumerate(lines):
             if i%1000 == 0:
                 _LOGGER.info(f"-- {filename} {i} --")
 
