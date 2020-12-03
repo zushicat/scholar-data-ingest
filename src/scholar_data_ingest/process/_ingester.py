@@ -28,27 +28,28 @@ def _create_table_entries(data: Dict[str, Any], use_lang_detection: bool=False) 
         if data["authors"] is None or len(data["authors"]) == 0:
             return False
 
+        # set empty abstract entry to None
+        data["paperAbstract"] = None if data["paperAbstract"] is None or len(data["paperAbstract"]) == 0 else data["paperAbstract"]
+
         text_id: str = str(uuid.uuid4())
 
         detected_language: Optional[str] = None
 
         # ***
-        # check for language
+        # check for language: use abstract text if possible, otherwise use title
         # ***
         used_words_for_lang_detection = 6
         if use_lang_detection is True:
-            try:
-                shortened_title: str = " ".join(data["title"].split(" ")[:used_words_for_lang_detection])  # use the first n words
-            except Exception:
-                shortened_title: str = data["title"]
-            detected_language, confidence = ldig.detect(shortened_title)
+            if data["paperAbstract"] is None:  
+                shortened_text = data["title"]
+            else:
+                shortened_text = data["paperAbstract"]
+            
+            shortened_text = " ".join(shortened_text.split(" ")[:used_words_for_lang_detection])  # use the first n words
+            detected_language, confidence = ldig.detect(shortened_text)
             
             if confidence < 0.5:  # needs to be confident enough
                 detected_language = None
-        
-
-        # set empty abstract entry to None
-        data["paperAbstract"] = None if data["paperAbstract"] is None or len(data["paperAbstract"]) == 0 else data["paperAbstract"]
 
         # ***
         # 
@@ -128,7 +129,7 @@ def _process_bulk_file(filename: str) -> None:
     try:
         with open(f"{DIRNAME}/tmp/{filename}") as f:
             lines: List[str] = f.read().split("\n")
-        for i, line in enumerate(lines[:1]):
+        for i, line in enumerate(lines[:2]):
             if i%1000 == 0:
                 _LOGGER.info(f"-- {filename} {i} --")
 
@@ -136,7 +137,7 @@ def _process_bulk_file(filename: str) -> None:
                 line_data: Dict[str, Any] = json.loads(line)
                 table_paper_entry, table_text_entry, table_author_entries = _create_table_entries(data=line_data, use_lang_detection=USE_LANG_DETECTION)
             
-                if table_paper_entry is not None:  # all are None, see exception above
+                if table_paper_entry is not None:  # see exception above
                     table_paper_data.append(table_paper_entry)
                     table_text_data.append(table_text_entry)
                     table_author_data += table_author_entries
@@ -148,9 +149,9 @@ def _process_bulk_file(filename: str) -> None:
         # _LOGGER.info(f"ERROR 0 ---> {e}")
         pass
     
-    _LOGGER.info(f"---> {table_paper_data}")
+    # _LOGGER.info(f"---> {table_paper_data}")
     # _LOGGER.info(f"---> {table_author_data}")
-    # _LOGGER.info(f"---> {table_text_data}")
+    _LOGGER.info(f"---> {table_text_data}")
 
     # db_bulk_insert_into_table("paper", table_paper_data)
     # db_bulk_insert_into_table("text", table_text_data)
