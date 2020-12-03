@@ -107,12 +107,13 @@ def _create_table_entries(data: Dict[str, Any], use_lang_detection: bool=False) 
             "first_author_id": all_author_ids[0],
             "last_author_id": last_author_id,
             "co_authors_ids": co_authors_ids,
-            "research_fields": ",".join(data["fieldsOfStudy"]),
+            "research_fields": ",".join(data["fieldsOfStudy"]) if len(data["fieldsOfStudy"]) > 0 else None,
             "text_id": text_id,
             "is_cited_ids": ",".join(data["inCitations"]) if len(data["inCitations"]) > 0 else None,
             "has_cited_ids": ",".join(data["outCitations"]) if len(data["outCitations"]) > 0 else None,
             "number_has_cited": len(data["outCitations"]),
-            "number_is_cited": len(data["inCitations"])
+            "number_is_cited": len(data["inCitations"]),
+            "number_research_fields": len(data["fieldsOfStudy"])
         }
         
         return table_paper_entry, table_text_entry, table_author_entries

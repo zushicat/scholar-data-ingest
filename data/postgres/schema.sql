@@ -68,7 +68,8 @@ CREATE TABLE public.paper (
     co_authors_ids text,
     number_authors integer NOT NULL,
     number_has_cited integer,
-    number_is_cited integer
+    number_is_cited integer,
+    number_research_fields integer
 );
 
 
