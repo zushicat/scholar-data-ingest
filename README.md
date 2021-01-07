@@ -49,7 +49,7 @@ $ curl -O https://s3-us-west-2.amazonaws.com/ai2-s2-research-public/open-corpus/
 $ curl -O https://s3-us-west-2.amazonaws.com/ai2-s2-research-public/open-corpus/2020-11-06/s2-corpus-000.gz
 ```
 
-**Place the individual bulk files into /data/tmp for ingestion.** (./data is defined as enviromental variable DATA_LOCATION in Dockerfile.)
+**Place the individual uncompressed bulk files into /data/tmp for ingestion.** (./data is defined as enviromental variable DATA_LOCATION in Dockerfile.)
 
 
 ## Semantic Scholar JSON
