@@ -49,6 +49,9 @@ $ curl -O https://s3-us-west-2.amazonaws.com/ai2-s2-research-public/open-corpus/
 $ curl -O https://s3-us-west-2.amazonaws.com/ai2-s2-research-public/open-corpus/2020-11-06/s2-corpus-000.gz
 ```
 
+**Place the individual bulk files into /data/tmp for ingestion.** (./data is defined as enviromental variable DATA_LOCATION in Dockerfile.)
+
+
 ## Semantic Scholar JSON
 Check out this [JSON example](readme_files/semantic_scholar_corpus_entry_example.json) of  incoming data from an downloaded Semantic Scholar corpus batch.
 
